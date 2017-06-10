@@ -1,8 +1,0 @@
-language: csharp
-solution: LinkShortener.sln
-install:
-  - nuget restore LinkShortener.sln
-  - nuget install nunit.console -OutputDirectory testrunner
-script:
-  - xbuild /p:Configuration=Release LinkShortener.sln
- # - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./AspNetMvcEasyRoutingTest/bin/Release/AspNetMvcEasyRoutingTest.dll
