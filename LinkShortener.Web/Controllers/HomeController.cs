@@ -8,8 +8,9 @@ namespace LinkShortener.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(string id)
         {
+            if (string.IsNullOrEmpty(id)) return HttpNotFound("Link is invalid");
             return View();
         }
 
