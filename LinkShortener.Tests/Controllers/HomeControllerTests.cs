@@ -1,6 +1,8 @@
-﻿using System.Net;
+using System.Net;
 using System.Web.Mvc;
 using LinkShortener.Web.Controllers;
+using LinkShortener.Web.Models;
+using Moq;
 using NUnit.Framework;
 
 namespace LinkShortener.Tests.Controllers
@@ -13,27 +15,49 @@ namespace LinkShortener.Tests.Controllers
         [SetUp]
         public void Setup()
         {
-            _controller = new HomeController();
+            var fakeLinkService = CreateMockLinkService();
+            _controller = new HomeController(fakeLinkService);
         }
 
-        [Test]
-        public void Index_NullId_ShouldReturn404()
+        [TestCase(null)]
+        [TestCase("")]
+        public void Index_NullOrEmptyId_ShouldReturn404(string id)
         {
-            var result = _controller.Index(null) as HttpStatusCodeResult;
+            var result = _controller.Index(id) as HttpStatusCodeResult;
 
             Assert.NotNull(result);
             Assert.AreEqual(HttpStatusCode.NotFound, (HttpStatusCode)result.StatusCode);
             Assert.AreEqual("Link is invalid", result.StatusDescription);
         }
 
-        [Test]
-        public void Index_EmptyId_ShouldReturn404()
+        [TestCase("aaaa", ExpectedResult = "https://www.google.com")]
+        [TestCase("bbbb", ExpectedResult = "https://www.twitch.tv")]
+        public string Index_ValidId_ShouldReturnRedirect(string id)
         {
-            var result = _controller.Index("") as HttpStatusCodeResult;
+            var result = _controller.Index(id) as RedirectResult;
+
+            Assert.NotNull(result);
+            Assert.AreEqual(true, result.Permanent);
+            return result.Url;
+        }
+
+        [TestCase("cccc")]
+        [TestCase("dddd")]
+        public void Index_InvalidId_ShouldReturn404(string id)
+        {
+            var result = _controller.Index(id) as HttpStatusCodeResult;
 
             Assert.NotNull(result);
             Assert.AreEqual(HttpStatusCode.NotFound, (HttpStatusCode)result.StatusCode);
             Assert.AreEqual("Link is invalid", result.StatusDescription);
+        }
+
+        private ILinkService CreateMockLinkService()
+        {
+            var fakeLinkService = new Mock<ILinkService>();
+            fakeLinkService.Setup(s => s.GetLinkById(It.Is<string>(a => a == "aaaa"))).Returns(new Link { Url = "https://www.google.com" });
+            fakeLinkService.Setup(s => s.GetLinkById(It.Is<string>(a => a == "bbbb"))).Returns(new Link { Url = "https://www.twitch.tv" });
+            return fakeLinkService.Object;
         }
     }
 }
