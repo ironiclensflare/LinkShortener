@@ -64,19 +64,4 @@ namespace LinkShortener.Tests.Services
             return mockContext.Object;
         }
     }
-
-    public class LinkService : ILinkService
-    {
-        private readonly LinkShortenerContext _context;
-
-        public LinkService(LinkShortenerContext context)
-        {
-            _context = context;
-        }
-
-        public Link GetLinkById(string id)
-        {
-            return _context.Links.SingleOrDefault(l => l.Id == id);
-        }
-    }
 }

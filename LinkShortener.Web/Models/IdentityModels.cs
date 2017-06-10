@@ -21,7 +21,7 @@ namespace LinkShortener.Web.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("LinkShortenerContext", throwIfV1Schema: false)
         {
         }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using LinkShortener.Web.Models;
+using StructureMap;
 
 namespace LinkShortener.Web.Controllers
 {
@@ -16,6 +17,7 @@ namespace LinkShortener.Web.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+        [DefaultConstructor]
         public ManageController()
         {
         }

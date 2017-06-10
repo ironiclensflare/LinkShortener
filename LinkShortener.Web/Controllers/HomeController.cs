@@ -11,7 +11,8 @@ namespace LinkShortener.Web.Controllers
         {
             _links = links;
         }
-
+        
+        [Route("ShortUrl", Order = 0)]
         public ActionResult Index(string id)
         {
             if (string.IsNullOrEmpty(id)) return InvalidLink();
