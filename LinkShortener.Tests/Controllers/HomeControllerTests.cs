@@ -15,8 +15,8 @@ namespace LinkShortener.Tests.Controllers
         [SetUp]
         public void Setup()
         {
-            var fakeLinkService = CreateMockLinkService();
-            _controller = new HomeController(fakeLinkService);
+            var mockLinkService = CreateMockLinkService();
+            _controller = new HomeController(mockLinkService);
         }
 
         [TestCase(null)]
@@ -52,7 +52,7 @@ namespace LinkShortener.Tests.Controllers
             Assert.AreEqual("Link is invalid", result.StatusDescription);
         }
 
-        private ILinkService CreateMockLinkService()
+        private static ILinkService CreateMockLinkService()
         {
             var fakeLinkService = new Mock<ILinkService>();
             fakeLinkService.Setup(s => s.GetLinkById(It.Is<string>(a => a == "aaaa"))).Returns(new Link { Url = "https://www.google.com" });
